@@ -1,0 +1,3 @@
+Documentatation coming soon ... 
+
+`g++ benchmark.cpp heap.c utility.c arrayHeap.h -o a.out && ./a.out`

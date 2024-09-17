@@ -1,6 +1,5 @@
 #include "utility.h"
 #include <stdio.h>
-#include "config.h"
 
 /***********************************************/
 /*          Local function prototypes          */

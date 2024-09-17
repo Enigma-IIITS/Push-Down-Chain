@@ -1,5 +1,4 @@
 #include "heap.h"
-#include "config.h"
 
 
 bRootNode* Arr2Heap(int *arr, int size, bool maxHeap)
