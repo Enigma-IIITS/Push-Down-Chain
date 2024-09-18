@@ -407,14 +407,24 @@ void benchmark_2(int rounds, int min, int max)
 int main()
 {
     initRand();
-    // if (test_1(10000, 1, 1000) == 1)
-    // {
-    //     printf("Test 1 successful\n");
-    // }
-    // if (test_2(10000, 1, 1000) == 1)
-    // {
-    //     printf("Test 2 successful\n\n");
-    // }
+    if (test_1(10000, 1, 1000) == 1)
+    {
+        printf("Test 1 successful\n");
+    }
+    else 
+    {
+        printf("Test 1 failed\n");
+        return 0;
+    }
+    if (test_2(10000, 1, 1000) == 1)
+    {
+        printf("Test 2 successful\n\n");
+    }
+    else 
+    {
+        printf("Test 2 failed\n");
+        return 0;
+    }
     benchmark_1(BENCHMARK_ROUNDS, 1, 10000);
     benchmark_2(BENCHMARK_ROUNDS, 1, 10000);
     return 1;

@@ -24,26 +24,23 @@ bNode* CreatebNode(int data)
     return newbNode;
 }
 
-/*
-if returnMax is true
-    returns true if a > b 
-    else returns false 
-
-if returnMax is false
-    returns true if a < b
-    else returns false
-*/
 bool MaxMin(int a, int b, bool returnMax)
 {
-    bool result = a < b;
-    return returnMax^result;
-}
-
-bool MaxMinEqual(int a, int b, bool returnMax)
-{
-    bool result = a <= b;
-    return returnMax^result;
-}    
+    if (returnMax == true)
+    {
+        return a > b;
+    }
+    else 
+    {
+        return a < b;
+    }
+    /*
+     *  bool result = a < b
+     *  return returnMax^result; 
+     * The above two lines of code will not work for the case a = 6, b = 6 
+     * It is supposed to return false, but returns true
+     */
+} 
 
 #ifdef DEBUG_HEAP
 static int call = 1;    

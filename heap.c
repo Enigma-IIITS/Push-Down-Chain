@@ -1,6 +1,5 @@
 #include "heap.h"
 
-
 bRootNode* Arr2Heap(int *arr, int size, bool maxHeap)
 {
     bRootNode *root = CreatebRootNode(arr[0]);
@@ -79,12 +78,10 @@ bRootNode* pushHeap( bRootNode *root, int num, bool maxHeap )
 
 popHeapResult popHeap(bRootNode* root, bool maxHeap)
 {
-    int num, container;
-    bNode* temp = (bNode*)root;
+    int num;
+    bNode* temp;
     bool swap_with_right = false;
     bool swap_with_left = false;
-    bool left_is_null = false;
-    bool right_is_null = false;
     popHeapResult res;
     
     if ( root == NULL )
@@ -114,10 +111,12 @@ popHeapResult popHeap(bRootNode* root, bool maxHeap)
     {
         root->col--;
     }
+
+    res.result = 1;
     
     if ( root->lastParent != NULL )
     {
-        if ( root->lastParent->right != NULL )
+        if ( root->col & 1)
         {
             num = root->lastParent->right->data;
             free( root->lastParent->right);
@@ -148,99 +147,67 @@ popHeapResult popHeap(bRootNode* root, bool maxHeap)
         }
     }
     
+    temp = (bNode *)root;
     root->data = num;
+    // dispTree((Node *)root);
     
-    while (true)
+    // Objective : Heapify.. (Bubble down)
+    while ( true ) 
     {
         swap_with_left = false;
         swap_with_right = false;
-        left_is_null = false;
-        right_is_null = false;
 
-        if (temp->left == NULL)
+        // if right is not null, left is definitely not null
+        if (temp->right != NULL)
         {
-            left_is_null = true;
-        }
-        
-        if (temp->right == NULL)
-        {
-            right_is_null = true;
-        }
-
-        if (left_is_null && !right_is_null)
-        {
-            if( MaxMin(temp->right->data, temp->data, maxHeap) )
+            if ( MaxMin( temp->right->data, temp->data, maxHeap ))
             {
                 swap_with_right = true;
+                if ( MaxMin( temp->left->data, temp->right->data, maxHeap ) )
+                {
+                    swap_with_right = false;
+                    swap_with_left = true;
+                }
             }
-            else
-            {
-                break;
-            }
-        }
-        
-        else if (!left_is_null && right_is_null)
-        {
-            if ( MaxMin(temp->left->data, temp->data, maxHeap) )
+            else if ( MaxMin( temp->left->data, temp->data, maxHeap ) )
             {
                 swap_with_left = true;
             }
-            else 
+        }
+        
+        else if (temp->left != NULL)
+        {
+            if ( MaxMin( temp->left->data, temp->data, maxHeap ) )
             {
-                break;
+                swap_with_left = true;
             }
         }
         
-        else if (!left_is_null && !right_is_null)
-        {
-            if (MaxMin(temp->left->data, temp->right->data, maxHeap))
-            {
-                if (MaxMin(temp->left->data, temp->data, maxHeap))
-                {
-                    swap_with_left = true;
-                }
-                else 
-                {
-                    break;
-                }
-            }
-            
-            else 
-            {
-                if (MaxMin(temp->right->data, temp->data, maxHeap))
-                {
-                    swap_with_right = true;
-                }
-                else 
-                {
-                    break;
-                }                
-            }
-        }
-
-        else
-        {
-            break;
-        }
-
         if (swap_with_left)
         {
-            container = temp->data;
-            temp->data = temp->left->data;
-            temp->left->data = container;
+            num = temp->left->data;
+            temp->left->data = temp->data;
+            temp->data = num;
             temp = temp->left;
         }
-        
         else if (swap_with_right)
         {
-            container = temp->data;
-            temp->data = temp->right->data;
-            temp->right->data = container;
+            num = temp->right->data;
+            temp->right->data = temp->data;
+            temp->data = num;
             temp = temp->right;
         }
+        else
+        {
+            // printf("NUM : %d\n", temp->data);
+            break;    
+        }
     }
+    // dispNodeTree((Node *)root);
+    res.result = 1;
     return res;
 }
+
 
 bool HeapIsValid(bNode *root, bool maxHeap)
 {
