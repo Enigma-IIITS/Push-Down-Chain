@@ -1,8 +1,6 @@
 #include "heap.h"
 #include <cstdio>
 #include <ctime>
-
-// C++ program to demonstrate the use of priority_queue
 #include <iostream>
 #include <queue>
 #include "arrayHeap.h"
@@ -116,14 +114,12 @@ uint8_t test_1(int rounds, int min, int max)
 
 /* Push and pop randomly*/
 uint8_t test_2(int rounds, int min, int max)
-{
-    
+{    
     int maxSize = 10;
 
     int *arrHeap = (int *)malloc(maxSize * sizeof(int));
     int size = 0;
     int arrHeapres = 0;
-
 
 	priority_queue<int> pq;
 
@@ -403,20 +399,29 @@ void benchmark_2(int rounds, int min, int max)
     printf("variant_time : %lf\n\n", (double)variant_time / CLOCKS_PER_SEC);
 }
 
-
 int main()
 {
     initRand();
-    // if (test_1(10000, 1, 1000) == 1)
-    // {
-    //     printf("Test 1 successful\n");
-    // }
-    // if (test_2(10000, 1, 1000) == 1)
-    // {
-    //     printf("Test 2 successful\n\n");
-    // }
+    if (test_1(10'000, 1, 10'000) == 1)
+    {
+        printf("Test 1 successful\n");
+    }
+    else 
+    {
+        printf("Test 1 failed\n");
+        return 1;
+    }
+    if (test_2(10'000, 1, 10'000) == 1)
+    {
+        printf("Test 2 successful\n\n");
+    }
+    else 
+    {
+        printf("Test 2 failed\n");
+        return 1;
+    }
+    
     benchmark_1(BENCHMARK_ROUNDS, 1, 10000);
     benchmark_2(BENCHMARK_ROUNDS, 1, 10000);
-    return 1;
+    return 0;
 }
-

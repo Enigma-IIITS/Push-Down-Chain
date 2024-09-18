@@ -9,7 +9,6 @@ typedef struct bNode{
     int data;
     struct bNode *left;
     struct bNode *right;
-    struct bNode *nextParent;
 }bNode;
 
 typedef struct bRootNode{
@@ -18,7 +17,6 @@ typedef struct bRootNode{
     bNode *right;
     int level;
     int col;
-    struct bNode* lastParent;
 }bRootNode;
 
 typedef struct popHeapResult{

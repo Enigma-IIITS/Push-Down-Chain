@@ -19,7 +19,6 @@ bNode* CreatebNode(int data)
     newbNode->data = data;
     newbNode->right = NULL;
     newbNode->left = NULL;
-    newbNode->nextParent = NULL;
 
     return newbNode;
 }
@@ -35,15 +34,21 @@ if returnMax is false
 */
 bool MaxMin(int a, int b, bool returnMax)
 {
-    bool result = a < b;
-    return returnMax^result;
-}
-
-bool MaxMinEqual(int a, int b, bool returnMax)
-{
-    bool result = a <= b;
-    return returnMax^result;
-}    
+    if (returnMax == true)
+    {
+        return a > b;
+    }
+    else 
+    {
+        return a < b;
+    }
+    /*
+     *  bool result = a < b
+     *  return returnMax^result; 
+     * The above two lines of code will not work for the case a = 6, b = 6 
+     * It is supposed to return false, but returns true
+     */
+} 
 
 #ifdef DEBUG_HEAP
 static int call = 1;    
@@ -70,7 +75,6 @@ bRootNode* CreatebRootNode(int num)
     bRootNode* root = (bRootNode*)malloc(sizeof(bRootNode));
     root->left = NULL;
     root->right = NULL;
-    root->lastParent = NULL;
     root->level = 1;
     root->col = 0;
     root->data = num;
