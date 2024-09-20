@@ -5,7 +5,6 @@
 /*          Local function prototypes          */
 /***********************************************/
 
-
 bNode* CreatebNode(int data)
 {
     bNode *newbNode = (bNode*)malloc(sizeof(bNode));
