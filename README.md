@@ -5,13 +5,6 @@ Run this to see benchmarks :
 
     `g++ benchmark.cpp heap.c utility.c arrayHeap.h -o a.out && ./a.out`
 
-### Pre-requisites : 
-- Heap
-- Linked list
-- Memory fragmentation
-- DFS 
-- BFS
-
 There are two famous heap implementations:
 1) Array
 2) Linked List (Binary Tree)
