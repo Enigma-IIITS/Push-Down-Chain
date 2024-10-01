@@ -40,7 +40,7 @@ There are two famous heap implementations:
 - It allocates memory separately for each node, allowing it to work in fragmented memory scenarios.
 
 
-## "Push Down - Chain" : Implementation
+## Push Down - Chain
 Combines the best of both - Speed and ability to work efficiently in fragmented memory
 
 Uses linked list (binary tree) to take care of fragmented memory scenarios.
