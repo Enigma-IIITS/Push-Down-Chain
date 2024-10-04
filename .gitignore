@@ -1,4 +1,5 @@
 *.out
 
-// github.com/hruthik0x/bintree - used for debugging
-bintree files 
+// github.com/hruthik0x/disptree - used for debugging
+disptree files 
+doc_files
