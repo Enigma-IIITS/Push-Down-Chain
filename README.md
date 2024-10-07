@@ -6,7 +6,7 @@ Objective : Build a heap implementation that is as fast as array implementation,
 
 Run this to see benchmarks : 
 
-    `g++ benchmark.cpp heap.c utility.c arrayHeap.h -o a.out && ./a.out`
+    g++ benchmark.cpp heap.c utility.c arrayHeap.h -o a.out && ./a.out
 
 There are two famous heap implementations:
 1) Array
@@ -46,4 +46,4 @@ Uses linked list (binary tree) to take care of fragmented memory scenarios.
 - Time taken to find this appropriate path is **always** directly proportional to height of the tree O(log(n)).
 - Uses a different approach to find the last leaf node element during deletion whose time complexity is always (constant) **O(1)**
 
-Read more about the internal implementation here.
+Read more about the internal implementation here.                                                                                                                                             

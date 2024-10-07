@@ -13,15 +13,21 @@ Finding this position requires a level-order traversal (BFS), which takes O(n) t
 What if we can bring down the time complexity for finding the appropriate position ??
 
 ### Finding the path
-Look at the following binary tree :
+Look at the following heap (binary tree structure / implementation)  :
 
-22, 18,19, 14,8,17,15  13,11,5,2,<br>
+![image_1](./Doc-Images/img_1.png)
+
+(The pink numbers under each node represent `L` and `C` respectively    )
+
 In order to maintain the complete binary tree property, the next element has to be inserted at position `P`, `L = 3` and `C = 4` **(`L` stands for level and `C` stands for column).**<br>
 Upon closer inspection, we also find that, inorder to reach the position P, we have to go traverse from root in the following order 
 
 `root -> right -> left -> left` i.e `Right, Left, Left` 
 
 If I represent right as 1 and left as 0, then it would be `100` which is binary representation of `C` in `L` bits, i.e 4 in 3 bits.
+
+![](./Doc-Images/img_2.png)
+
 This means **if** I know `C` and `L`, I can get to the appropriate position in O(log n), as I can simply traverse the path by checking every bit of `C` represented in binary in `L` bits.<br>
 **This is true for all `C` and `L`.**
 
@@ -59,13 +65,25 @@ What if we perform `Push-Down` instead of the traditional `Bubble-Up` ?
 
 Example : 
 
-Let Q be 20.
+Let Q be a node with the number 20.<br>
 Since `C` and `L` are 4 and 3 respectively, the path is Right, left, left (`100` : `C` represented in binary as `L` bits)
 - First we check if Q is larger than root.
 In this case its not, so we continue down the path.
-- We go right : 1, here 19 is smaller than 20, so both are swapped, Now Q is 19.
-- We go left  : 0, here 17 is smaller than 19, so both are swapped, Now Q is 17.
-- We go left  : 0, insert the Q (17) here, as this is the last direction / bit.
+
+![](./Doc-Images/img_3.png)
+
+- We go `right : 1`, here 19 is smaller than 20, so both are swapped, Now Q is 19.
+
+![](./Doc-Images/img_4.png)
+
+- We go `left : 0`, here 17 is smaller than 19, so both are swapped, Now Q is 17.
+    + Here we can go right swap Q and 15, push Q down, but that would not satisfy full binary tree, following the path with C and L ensures full binary tree property.
+
+![](./Doc-Images/img_5.png) 
+
+- We go `left : 0`, insert the Q (17) here, as this is the last direction / bit.
+
+![](./Doc-Images/img_6.png) 
 
 Now we are performing `Push-Down` instead of `Bubble-Up`.
 
@@ -87,9 +105,9 @@ Number in root node is returned
 Last number (Number in the left most leaf node) will be swapped with the number in the root node and the left most leaf node will be pruned.
 
     Step 0 : Return root->num 
-    Step 1 : Find the right most leaf node in last level : O(n)
-    Step 2 : Swap the root with lead node.
-    Step 3 : Delete the lead node.
+    Step 1 : Find the number in right most leaf node in last level : O(n)
+    Step 2 : Replace the number in root node with the number from the leaf node.
+    Step 3 : Delete the leaf node.
     Step 3 : Heapify. (Starting from root). : O(log n)
 
     Total complexity = O(n) + O(log n)
@@ -98,18 +116,95 @@ Last number (Number in the left most leaf node) will be swapped with the number 
 We can get the O(n) in finding the right most leaf node in last level to O(log n) by using `L` and `C` as explained in the Insertion section.
 Which makes the complexity to O(log n) + O(log n) [Finding + Heapify]
 
+Before deletion of the node I update C and L as they represent the path to the position where the **next** node has to be inserted, to get the path for the last leaf 
+After I delete the element I update the C to the next element  : 
+1) Decrement C  `C--`    
+2) if C == -1 : 
+    Decrement L `L--`
+    C = 2<sup>`L`</sup> - 1
+
 This implementation uses same amount of memory as a traditional linked list implementation.(Except the root node, as it stores `L` and `C`).<br>
-Implementation is not in main brance, its in `No-Chain` branch
+Implementation is not in main branch, its in `No-Chain` branch
 
 Can we bring down the complexity of finding the right most leaf in last level node to O(1) from O(log n) ?
 
-### Chain
+## Chain
 Note : This implementation uses more memory per node than a traditional binary tree implementation (Stores one address in addition to a normal node).
 
-We can chain/connect all the non-leaf nodes with a linked list, where the head (Called as `Last Parent`) of the linked list is the parent of the last leaf node.
+We can chain/connect all the non-leaf nodes other than root with a linked list, where the head (Called as `Last Parent`) of the linked list is the parent of the last leaf node.
 The address of `Last Parent` is stored in the root.
 
-As I keep inserting elements, I chain the parents.
+While inserting a new leaf node in Push-Down I pass through the parent node, in order to insert the new node.<br>
+As I keep inserting elements, I chain these parents.
 
-For example :<br>
-Root Node : a
+Example :
+
+Here A, B, C ..... Z represent the nodes and not the numbers they hold.<br>
+
+Here A is the root node. A->lastParent = NULL
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](./Doc-Images/img_7.png)
+
+D is added to the tree.<br>
++ Now B is the last parent, so 
+    1) B->nextParent = root->lastParent (which is NULL)
+    2) root->lastParent = B
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](./Doc-Images/img_8.png)
+
+E is added.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](./Doc-Images/img_9.png)
+
+F is added.
++ Now C is the last parent, so 
+    1) C->nextParent = root->lastParent (which is B)
+    2) root->lastParent = C
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](./Doc-Images/img_10.png)
+
+G is added.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](./Doc-Images/img_11.png)
+
+H is added.
+- Now D is the last parent, so 
+    1) D->nextParent = root->lastParent (which is C)
+    2) root->lastParent = D
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](./Doc-Images/img_12.png)
+
+### Deletion
+Since I have the address of the last parent, I can simply find the right most leaf node in the last level using `C`.
+
+    if C & 1 == 1 :
+
+        Node to delete = lastParent->right.  
+
+    else :
+
+        Node to delete = lastParent->left.
+
+        // update lastParent
+        root->lastParent = root->lastParent->nextParent
+
+For example,
+Here A,B,C..Z represent the nodes and the numbers they hold.
+Current tree : A BC DEFG HIJ root->last parent = E, col = 2
+
+Deleting right most leaf node in last level : 
+since C & 1 == 0 
+1) Delete lastParent->left which is J
+2) 
+3) C--
+
+Deleting J
+since `C & 1 == 0` delete lastParent->left i.e J
+also `root->lastParent = root->lastParent->nextParent` which is `D`
+
+Deleting I
+since `C & 1 == 1` 
+
+
+Now I can find the right most leaf node of last level with O(1) complexity.<br>
+So deleting element complexity is O(1) + O(log n) [O(1) for swapping and O(logn) for heapify] which is the same complexity of deletion in array implementation.
