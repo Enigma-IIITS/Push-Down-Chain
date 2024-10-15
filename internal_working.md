@@ -1,5 +1,4 @@
-To make a the new heap implementation, we will use existing implementations and modify them.
-We have two choices : 
+To combine the best of both, we have two choices : 
 1) Make array implementation work with fragmented memory
 2) Make linked list implementation faster.
 
