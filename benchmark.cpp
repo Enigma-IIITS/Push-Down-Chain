@@ -406,6 +406,9 @@ void benchmark_2(int rounds, int min, int max)
 
 int main()
 {
+    printf("pqTime : Time taken by priority_queue\n");
+    printf("arrHeapTime : Time taken by arrayHeap\n");
+    printf("variant_time : Time taken by variant heap\n\n");
     initRand();
     if (test_1(10000, 1, 1000) == 1)
     {

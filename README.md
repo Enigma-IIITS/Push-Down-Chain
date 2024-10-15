@@ -1,12 +1,21 @@
 # Push Down - Chain
 **Owner** : [Hruthik0x](https:/github.com/hruthik0x)
 
-This is a heap implementation, built as an attempt to use linked list structure in heap while working as fast as an array implementation of heap.<br>
-Objective : Build a heap implementation that is as fast as array implementation, along with the ability to work in fragmented memory environments.
+This is a heap implementation that attempts to use a linked list structure while achieving performance comparable to the array-based heap implementation.<br>
+
+Objective :
+
+    Build a heap implementation that is as fast as the array-based implementation, with the added capability to operate efficiently in fragmented memory environments.
+
+Result : 
+
+    Managed to reduce the complexity of insertion and deletion to O(log n) (the same as the array's complexity) at the cost of increased memory usage per element in the heap. However, it did not outperform the array implementation due to the memory localization advantage of arrays.
 
 Run this to see benchmarks : 
 
     g++ benchmark.cpp heap.c utility.c arrayHeap.h -o a.out && ./a.out
+
+You can read the [here](./internal_working.md)
 
 There are two famous heap implementations:
 1) Array
@@ -45,5 +54,3 @@ Uses linked list (binary tree) to take care of fragmented memory scenarios.
 - Does not insert the element at the end and then bubble it up, instead inserts the element at the top, and the pushes it down along a specific path which leads to the correct location (Location at which, inserting maintains complete binary tree property)
 - Time taken to find this appropriate path is **always** directly proportional to height of the tree O(log(n)).
 - Uses a different approach to find the last leaf node element during deletion whose time complexity is always (constant) **O(1)**
-
-Read more about the internal implementation here.                                                                                                                                             

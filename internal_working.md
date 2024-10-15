@@ -10,7 +10,7 @@ It is not possible to go with 1) as, the arrays need contigous block of memory, 
 In a binary heap ( tree-node structure ), a new node is usually added as the left most child of the first available leaf node in order to maintain the complete binary tree property. 
 Finding this position requires a level-order traversal (BFS), which takes O(n) time complexity, since we may need to examine all nodes to find the appropriate insertion point.
 
-What if we can bring down the time complexity for finding the appropriate position ??
+What if we can bring down the time complexity for finding the appropriate position ?
 
 ### Finding the path
 Look at the following heap (binary tree structure / implementation)  :
@@ -116,12 +116,13 @@ Last number (Number in the left most leaf node) will be swapped with the number 
 We can get the O(n) in finding the right most leaf node in last level to O(log n) by using `L` and `C` as explained in the Insertion section.
 Which makes the complexity to O(log n) + O(log n) [Finding + Heapify]
 
-Before deletion of the node I update C and L as they represent the path to the position where the **next** node has to be inserted, to get the path for the last leaf 
-After I delete the element I update the C to the next element  : 
-1) Decrement C  `C--`    
-2) if C == -1 : 
-    Decrement L `L--`
-    C = 2<sup>`L`</sup> - 1
+**Note :**
+
+    Before deletion of the node, update C and L as they represent the path to the position where the **next** node has to be inserted, to get the path for the last leaf
+    1) Decrement C (`C--`) 
+    2) if C == -1 :<br>
+        Decrement L (`L--`)
+        C = 2<sup>`L`</sup> - 1
 
 This implementation uses same amount of memory as a traditional linked list implementation.(Except the root node, as it stores `L` and `C`).<br>
 Implementation is not in main branch, its in `No-Chain` branch
@@ -140,6 +141,7 @@ As I keep inserting elements, I chain these parents.
 Example :
 
 Here A, B, C ..... Z represent the nodes and not the numbers they hold.<br>
+Red colored node is `root->lastParent` (Head of the chain)
 
 Here A is the root node. A->lastParent = NULL
 
@@ -152,6 +154,10 @@ D is added to the tree.<br>
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](./Doc-Images/img_8.png)
 
+Updated chain : 
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](./Doc-Images/img_15.png)
+
 E is added.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](./Doc-Images/img_9.png)
@@ -162,6 +168,10 @@ F is added.
     2) root->lastParent = C
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](./Doc-Images/img_10.png)
+
+Updated chain : 
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](./Doc-Images/img_14.png)
 
 G is added.
 
@@ -174,37 +184,74 @@ H is added.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](./Doc-Images/img_12.png)
 
+Updated chain : 
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](./Doc-Images/img_13.png)
+
 ### Deletion
+
+**Note :**
+
+    Before deletion of the node, update C and L as they represent the path to the position where the **next** node has to be inserted, to get the path for the last leaf
+    1) Decrement C (`C--`) 
+    2) if C == -1 :<br>
+        Decrement L (`L--`)<br>
+        C = 2<sup>`L`</sup> - 1
+
+
 Since I have the address of the last parent, I can simply find the right most leaf node in the last level using `C`.
 
-    if C & 1 == 1 :
+    if C & 1 == 1 
+    {
+        Node to delete = lastParent->right. 
+    } 
 
-        Node to delete = lastParent->right.  
-
-    else :
-
+    else 
+    {
         Node to delete = lastParent->left.
 
         // update lastParent
-        root->lastParent = root->lastParent->nextParent
+        root->lastParent = root->lastParent->nextParent 
+    }
 
 For example,
-Here A,B,C..Z represent the nodes and the numbers they hold.
-Current tree : A BC DEFG HIJ root->last parent = E, col = 2
+Here A,B,C..Z represent the nodes and not the numbers they hold
 
-Deleting right most leaf node in last level : 
-since C & 1 == 0 
-1) Delete lastParent->left which is J
-2) 
-3) C--
+Current tree : 
 
-Deleting J
-since `C & 1 == 0` delete lastParent->left i.e J
-also `root->lastParent = root->lastParent->nextParent` which is `D`
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](./Doc-Images/img_16.png)
 
-Deleting I
-since `C & 1 == 1` 
+Current chain : 
 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](./Doc-Images/img_18.png)
+
+Deleting `J` (`C = 2 L = 3`)
+
+- Since `C & 1 == 0` delete `root->lastParent->left` i.e `E->left` which is `J`
+- Also `root->lastParent = root->lastParent->nextParent` which is `D`
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](./Doc-Images/img_17.png)
+
+- Updated chain : 
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](./Doc-Images/img_13.png)
+
+
+Deleting `I` (`C = 1 L = 3`)
+
+- Since `C & 1 == 1`  delete `root->lastParent->right` i.e `D->right` which is `I`
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](./Doc-Images/img_12.png)
+
+Deleting `H` (`C = 0 L = 3`)
+- Since `C & 1 == 0` delete `root->lastParent->left` i.e `D->left` which is `H`
+- Also `root->lastParent = root->lastParent->nextParent` which is `C`
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](./Doc-Images/img_11.png)
+
+- Updated chain : 
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](./Doc-Images/img_14.png)
 
 Now I can find the right most leaf node of last level with O(1) complexity.<br>
 So deleting element complexity is O(1) + O(log n) [O(1) for swapping and O(logn) for heapify] which is the same complexity of deletion in array implementation.
