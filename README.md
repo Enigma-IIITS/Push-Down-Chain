@@ -15,7 +15,7 @@ Run this to see benchmarks :
 
     g++ benchmark.cpp heap.c utility.c arrayHeap.h -o a.out && ./a.out
 
-You can read the [here](./internal_working.md)
+You can read about the implementation and internal working [here](./internal_working.md)
 
 There are two famous heap implementations:
 1) Array
